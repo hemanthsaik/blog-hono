@@ -3,7 +3,7 @@ FROM node:20-alpine AS base
 FROM base AS builder
 
 RUN apk add --no-cache libc6-compat
-WORKDIR /app
+# WORKDIR /app
 
 COPY package*json tsconfig.json src ./
 
@@ -12,7 +12,7 @@ RUN npm i && \
     npm prune --production
 
 FROM base AS runner
-WORKDIR /app
+# WORKDIR /app
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 hono
@@ -24,4 +24,4 @@ COPY --from=builder --chown=hono:nodejs /app/package.json /app/package.json
 USER hono
 EXPOSE 3000
 
-CMD ["node", "/app/dist/index.js"]
+CMD ["node", "/dist/index.js"]
